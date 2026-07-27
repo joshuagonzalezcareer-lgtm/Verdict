@@ -1,1 +1,20 @@
+# Python
+__pycache__/
+*.pyc
 
+# Never commit API keys
+.env
+
+# Local cache database
+*.sqlite
+*.db
+
+# Virtual environment
+.venv/
+venv/
+
+# VS Code settings
+.vscode/
+
+# OS junk
+.DS_Store
