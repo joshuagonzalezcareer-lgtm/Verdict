@@ -1,3 +1,4 @@
+# Structure of the IOC model
 from dataclasses import dataclass
 from enum import Enum
 
