@@ -1,5 +1,6 @@
 # Validates what is a valid ip address
 import ipaddress
+import tldextract
 from triage.models import IOC, IOC_Type
 
 def validate_ip(text: str) -> IOC | None:
@@ -40,3 +41,14 @@ def validate_hash(text: str) -> IOC | None:
 
   return IOC(value=text, type=ioc_type)
 
+def validate_domain(text: str) -> IOC | None:
+  text = text.lower().rstrip(".") # remove trailing dot if present
+
+  parsed = tldextract.extract(text)
+
+
+  # real domain has both a domain and a suffix (ex. "google.com" has domain "google" and suffix "com")
+  if not parsed.domain or not parsed.suffix:
+    return None
+
+  return IOC(value=text, type=IOC_Type.DOMAIN)
