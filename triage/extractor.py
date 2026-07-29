@@ -1,4 +1,5 @@
 # Validates what is a valid ip address
+from email.mime import text
 import ipaddress
 import tldextract
 from triage.models import IOC, IOC_Type
@@ -52,3 +53,26 @@ def validate_domain(text: str) -> IOC | None:
     return None
 
   return IOC(value=text, type=IOC_Type.DOMAIN)
+
+def extract_from_text(text: str) -> list[IOC]:
+  junk = "\"',;:(){}[]<>|."
+
+  validators = [validate_ip, validate_hash, validate_domain]
+
+  found: list[IOC] = []
+
+  for token in text.split():
+    print("checking:", repr(token))
+    clean = token.strip(junk)
+    if not clean:
+      continue
+
+    for validator in validators:
+      ioc = validator(clean)
+      if ioc is not None:
+        found.append(ioc)
+        break
+
+  return found
+    
+      

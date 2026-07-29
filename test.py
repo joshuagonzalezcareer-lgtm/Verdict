@@ -1,4 +1,4 @@
-from triage.extractor import validate_ip, validate_hash, validate_domain
+from triage.extractor import validate_ip, validate_hash, validate_domain, extract_from_text
 
 tests = ["45.146.164.110", "10.0.0.5", "999.1.1.1", "hello"]
 
@@ -19,18 +19,28 @@ domain_tests = [
     "file.zzzznotatld", # fake TLD -> None
 ]
 
-for t in tests:
-    result = validate_ip(t)
-    print(f"{t:20} -> {result}")
+sample = """
+Jun 1 12:03:44 host sshd: Invalid user admin from 45.146.164.110, port 51022.
+File /tmp/payload.bin added (md5 44d88612fea8a8f36de82e1278abb02f).
+DNS query for "evil.com" from workstation 10.0.0.5 ignored.
+"""
+
+# for t in tests:
+#     result = validate_ip(t)
+#     print(f"{t:20} -> {result}")
 
 
 
-print("\nHash validation tests:")
-for t in hash_tests:
-    results = validate_hash(t)
-    print(f"{t:64} -> {results}")
+# print("\nHash validation tests:")
+# for t in hash_tests:
+#     results = validate_hash(t)
+#     print(f"{t:64} -> {results}")
 
-print("\nDomain tests:")
-for t in domain_tests:
-    x = validate_domain(t)
-    print(f"{t:30} -> {x}")
+# print("\nDomain tests:")
+# for t in domain_tests:
+#     x = validate_domain(t)
+#     print(f"{t:30} -> {x}")
+
+print("\nExtract-from-text results:")
+for ioc in extract_from_text(sample):
+    print(f"  {ioc.type.value:8} {ioc.value}")
