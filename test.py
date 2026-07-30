@@ -1,4 +1,4 @@
-from triage.extractor import validate_ip, validate_hash, validate_domain, extract_from_text
+from triage.extractor import validate_ip, validate_hash, validate_domain, extract_from_text, iter_json
 
 tests = ["45.146.164.110", "10.0.0.5", "999.1.1.1", "hello"]
 
@@ -24,6 +24,12 @@ Jun 1 12:03:44 host sshd: Invalid user admin from 45.146.164.110, port 51022.
 File /tmp/payload.bin added (md5 44d88612fea8a8f36de82e1278abb02f).
 DNS query for "evil.com" from workstation 10.0.0.5 ignored.
 """
+alert = {
+    "rule": {"id": "5710", "description": "sshd failed login"},
+    "data": {"srcip": "45.146.164.110", "port": 51022},
+    "syscheck": {"md5_after": "44d88612fea8a8f36de82e1278abb02f"},
+}
+
 
 # for t in tests:
 #     result = validate_ip(t)
@@ -42,6 +48,10 @@ DNS query for "evil.com" from workstation 10.0.0.5 ignored.
 #     print(f"{t:30} -> {x}")
 
 
-print("\nExtract-from-text results:")
-for ioc in extract_from_text(sample):
-    print(f"  {ioc.type.value:8} {ioc.value}")
+# print("\nExtract-from-text results:")
+# for ioc in extract_from_text(sample):
+#     print(f"  {ioc.type.value:8} {ioc.value}")
+
+print("\niter_json results:")
+for s in iter_json(alert):
+    print(f"  {s!r}")

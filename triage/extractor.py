@@ -74,5 +74,20 @@ def extract_from_text(text: str) -> list[IOC]:
         break
 
   return found
+
+def iter_json(obj):
+  # Base case: if the object is a string, yield it
+  if isinstance(obj, str):
+    yield obj
+  # dict maps keys to values ... ex {"key": "value"}
+  elif isinstance(obj, dict):
+    for value in obj.values():
+      yield from iter_json(value)
+  # Recurse and yield through all values in the list
+  elif isinstance(obj, list):
+    for item in obj:
+      yield from iter_json(item)
+
+
     
       
