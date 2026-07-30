@@ -1,0 +1,39 @@
+[
+  {
+    "integration": "aws",
+    "aws": {
+      "source": "guardduty",
+      "type": "UnauthorizedAccess:IAMUser/ConsoleLogin",
+      "eventName": "ConsoleLogin",
+      "sourceIPAddress": "75.0.101.245",
+      "recipientAccountId": "117521235382"
+    }
+  },
+  {
+    "integration": "gcp",
+    "gcp": {
+      "severity": "CRITICAL",
+      "jsonPayload": {
+        "sourceIP": "154.84.246.205",
+        "queryName": "mirrors.advancedhosters.com"
+      }
+    }
+  },
+  {
+    "source_event": "ms-graph-alert",
+    "agent": { "id": "002", "name": "Amazon", "ip": "10.0.0.5" },
+    "ms-graph": {
+      "title": "Malicious IP address",
+      "ipAddress": "141.98.81.37",
+      "providerAlertId": "afeaa0a6f464bc518db47d8890d176d34eec14a4893c3c14e659ea008916d48f"
+    }
+  },
+  {
+    "srcip": "102.67.14.233",
+    "user": "ana@sampledomain.net",
+    "gworkspace": { "eventname": "login success" }
+  },
+  {
+    "note": "trap line: private IP 192.168.1.23 and garbage 999.1.1.1 should be skipped"
+  }
+]

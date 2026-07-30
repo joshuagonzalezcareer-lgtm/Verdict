@@ -1,7 +1,6 @@
 # Validates what is a valid ip address
 from email.mime import text
-import ipaddress
-import tldextract
+import ipaddress, tldextract, json
 from triage.models import IOC, IOC_Type
 
 def validate_ip(text: str) -> IOC | None:
@@ -88,6 +87,16 @@ def iter_json(obj):
     for item in obj:
       yield from iter_json(item)
 
+def extract_from_wazuh(path:str) -> list[IOC]:
+  # open file and parse json into python objects
+  with open(path, "r", encoding="utf-8") as f:
+    alert = json.load(f)
 
+    # iterate every string in the alert, extract any IOCs
+    found: list[IOC] = []
+    for x in iter_json(alert):
+      found.extend(extract_from_text(x))
+
+    return found
     
       

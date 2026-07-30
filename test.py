@@ -1,34 +1,34 @@
-from triage.extractor import validate_ip, validate_hash, validate_domain, extract_from_text, iter_json
+from triage.extractor import validate_ip, validate_hash, validate_domain, extract_from_text, iter_json, extract_from_wazuh
 
-tests = ["45.146.164.110", "10.0.0.5", "999.1.1.1", "hello"]
+# tests = ["45.146.164.110", "10.0.0.5", "999.1.1.1", "hello"]
 
-hash_tests = [
-    "44d88612fea8a8f36de82e1278abb02f", # 32 chars -> MD5
-    "3395856ce81f2b7382dee72602f798b642f14140", # 40 chars -> SHA1
-    "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f", # 64 chars -> SHA256
-    "zzzz", # not hex -> None
-    "abc123", # hex but wrong length -> None
-]
+# hash_tests = [
+#     "44d88612fea8a8f36de82e1278abb02f", # 32 chars -> MD5
+#     "3395856ce81f2b7382dee72602f798b642f14140", # 40 chars -> SHA1
+#     "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f", # 64 chars -> SHA256
+#     "zzzz", # not hex -> None
+#     "abc123", # hex but wrong length -> None
+# ]
 
-domain_tests = [
-    "evil.com", # valid -> DOMAIN
-    "malware-c2.example-bad.top", # valid -> DOMAIN
-    "sub.domain.co.uk", # valid, multi-part TLD -> DOMAIN
-    "hello", # no dot -> None
-    "8.8.8.8", # an IP, not a domain -> None
-    "file.zzzznotatld", # fake TLD -> None
-]
+# domain_tests = [
+#     "evil.com", # valid -> DOMAIN
+#     "malware-c2.example-bad.top", # valid -> DOMAIN
+#     "sub.domain.co.uk", # valid, multi-part TLD -> DOMAIN
+#     "hello", # no dot -> None
+#     "8.8.8.8", # an IP, not a domain -> None
+#     "file.zzzznotatld", # fake TLD -> None
+# ]
 
-sample = """
-Jun 1 12:03:44 host sshd: Invalid user admin from 45.146.164.110, port 51022.
-File /tmp/payload.bin added (md5 44d88612fea8a8f36de82e1278abb02f).
-DNS query for "evil.com" from workstation 10.0.0.5 ignored.
-"""
-alert = {
-    "rule": {"id": "5710", "description": "sshd failed login"},
-    "data": {"srcip": "45.146.164.110", "port": 51022},
-    "syscheck": {"md5_after": "44d88612fea8a8f36de82e1278abb02f"},
-}
+# sample = """
+# Jun 1 12:03:44 host sshd: Invalid user admin from 45.146.164.110, port 51022.
+# File /tmp/payload.bin added (md5 44d88612fea8a8f36de82e1278abb02f).
+# DNS query for "evil.com" from workstation 10.0.0.5 ignored.
+# """
+# alert = {
+#     "rule": {"id": "5710", "description": "sshd failed login"},
+#     "data": {"srcip": "45.146.164.110", "port": 51022},
+#     "syscheck": {"md5_after": "44d88612fea8a8f36de82e1278abb02f"},
+#}
 
 
 # for t in tests:
@@ -52,6 +52,10 @@ alert = {
 # for ioc in extract_from_text(sample):
 #     print(f"  {ioc.type.value:8} {ioc.value}")
 
-print("\niter_json results:")
-for s in iter_json(alert):
-    print(f"  {s!r}")
+# print("\niter_json results:")
+# for s in iter_json(alert):
+#     print(f"  {s!r}")
+
+print("\nextract_from_wazuh results:")
+for ioc in extract_from_wazuh("samples/wazuh_sample.json"):
+    print(f"  {ioc.type.value:8} {ioc.value}")
