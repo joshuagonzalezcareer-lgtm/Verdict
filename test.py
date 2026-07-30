@@ -41,6 +41,7 @@ DNS query for "evil.com" from workstation 10.0.0.5 ignored.
 #     x = validate_domain(t)
 #     print(f"{t:30} -> {x}")
 
+
 print("\nExtract-from-text results:")
 for ioc in extract_from_text(sample):
     print(f"  {ioc.type.value:8} {ioc.value}")
