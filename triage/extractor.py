@@ -64,7 +64,6 @@ def extract_from_text(text: str) -> list[IOC]:
   found: list[IOC] = []
 
   for token in text.split():
-    print("checking:", repr(token))
     clean = token.strip(junk)
     if not clean:
       continue

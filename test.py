@@ -56,6 +56,6 @@ from triage.extractor import validate_ip, validate_hash, validate_domain, extrac
 # for s in iter_json(alert):
 #     print(f"  {s!r}")
 
-print("\nextract_from_wazuh results:")
+
 for ioc in extract_from_wazuh("samples/wazuh_sample.json"):
     print(f"  {ioc.type.value:8} {ioc.value}")
