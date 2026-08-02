@@ -44,6 +44,9 @@ def validate_hash(text: str) -> IOC | None:
 def validate_domain(text: str) -> IOC | None:
   text = text.lower().rstrip(".") # remove trailing dot if present
 
+  if "@" in text:
+    return None
+
   parsed = tldextract.extract(text)
 
 
