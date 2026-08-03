@@ -1,5 +1,5 @@
 from triage.extractor import validate_ip, validate_hash, validate_domain, extract_from_text, iter_json, extract_from_wazuh
-
+from triage.lookups.abuseipdb import check_abuseipdb
 # tests = ["45.146.164.110", "10.0.0.5", "999.1.1.1", "hello"]
 
 # hash_tests = [
@@ -57,5 +57,7 @@ from triage.extractor import validate_ip, validate_hash, validate_domain, extrac
 #     print(f"  {s!r}")
 
 
-for ioc in extract_from_wazuh("samples/wazuh_sample.json"):
-    print(f"  {ioc.type.value:8} {ioc.value}")
+# for ioc in extract_from_wazuh("samples/wazuh_sample.json"):
+#     print(f"  {ioc.type.value:8} {ioc.value}")
+
+print (check_abuseipdb("118.25.6.39"))
