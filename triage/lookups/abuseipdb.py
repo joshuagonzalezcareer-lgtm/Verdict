@@ -17,7 +17,14 @@ def check_abuseipdb(ip: str):
         "maxAgeInDays": 90,
     }
 
-    response = requests.get(url, headers=headers, params=params)
+    try:
+        response = requests.get(url, headers=headers, params=params)
+    except requests.RequestException:
+        return None
+
+    if response.status_code != 200:
+        return None
+
 
     data = response.json()["data"]
     return {
