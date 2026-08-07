@@ -18,7 +18,7 @@ def check_abuseipdb(ip: str):
     }
 
     try:
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params=params, timeout=10)
     except requests.RequestException:
         return None
 
