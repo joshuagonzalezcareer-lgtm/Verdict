@@ -12,5 +12,22 @@ def check_virustotal(ip: str):
         "x-apikey": os.getenv("VIRUSTOTAL_API_KEY"),
     }
 
-    response = requests.get(url, headers=headers, timeout=10)
-    return response.json()
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+    except requests.RequestException:
+        return None
+
+    if response.status_code != 200:
+        return None
+
+    
+    attributes = response.json()["data"]["attributes"]
+    stats = attributes["last_analysis_stats"]
+
+    return{
+        "malicious": stats["malicious"],
+        "suspicious": stats["suspicious"],
+        "harmless": stats["harmless"],
+        "reputation": attributes["reputation"],
+    }
