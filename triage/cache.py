@@ -3,6 +3,7 @@ import json
 import time
 
 DB_PATH = "cache.db" # single file for sqlite3 database
+TTL_SECONDS = 604800 # 7 days in seconds
 
 def init_cache():
     connection = sqlite3.connect(DB_PATH)
@@ -37,3 +38,26 @@ def write_cache(ioc, source, results):
 
     connection.commit()
     connection.close()
+
+
+def read_cache(ioc, source):
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT result, fetched_at FROM lookups
+        WHERE ioc = ? AND source = ?
+    """, (ioc, source))
+
+    row = cursor.fetchone()
+    connection.close()
+
+    if row is None:
+        return None
+
+    result, fetched_at = row
+    # Check if the cached result is still valid based on TTL
+    if time.time() - fetched_at > TTL_SECONDS:
+        return None
+
+    return json.loads(result)    
