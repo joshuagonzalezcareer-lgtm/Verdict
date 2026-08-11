@@ -3,6 +3,10 @@ from triage.lookups.abuseipdb import check_abuseipdb
 from triage.lookups.urlhaus import check_urlhaus
 from triage.lookups.virustotal import check_virustotal
 from triage.cache import init_cache, write_cache, read_cache
+from triage.models import IOC, IOC_Type
+from triage.combiner import enrich
+from triage.cache import init_cache
+import time
 # tests = ["45.146.164.110", "10.0.0.5", "999.1.1.1", "hello"]
 
 # hash_tests = [
@@ -68,6 +72,19 @@ from triage.cache import init_cache, write_cache, read_cache
 
 init_cache()
 # print("Cache initialized.")
-write_cache("1.2.3.4", "abuseipdb", {"score": 100, "reports": 5})
-print("fresh read:", read_cache("1.2.3.4", "abuseipdb"))
-print("missing read:", read_cache("9.9.9.9", "abuseipdb"))
+# write_cache("1.2.3.4", "abuseipdb", {"score": 100, "reports": 5})
+# print("fresh read:", read_cache("1.2.3.4", "abuseipdb"))
+# print("missing read:", read_cache("9.9.9.9", "abuseipdb"))
+
+# test_ioc = IOC(value="64.89.163.215", type=IOC_Type.IPV4, source="test")
+# print(enrich(test_ioc))
+
+test_ioc = IOC(value="64.89.163.215", type=IOC_Type.IPV4, source="test")
+
+start = time.time()
+print(enrich(test_ioc))
+print(f"first run: {time.time() - start:.2f}s")
+
+start = time.time()
+print(enrich(test_ioc))
+print(f"second run: {time.time() - start:.2f}s")
