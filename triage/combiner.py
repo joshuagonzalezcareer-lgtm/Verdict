@@ -1,6 +1,6 @@
 from triage.models import IOC_Type
 from triage.lookups.abuseipdb import check_abuseipdb
-from triage.lookups.virustotal import check_virustotal
+from triage.lookups.virustotal import check_virustotal, check_hash
 from triage.lookups.urlhaus import check_urlhaus
 from triage.cache import read_cache, write_cache, init_cache
 
@@ -22,5 +22,6 @@ def enrich(ioc):
         results['virustotal'] = cache_lookup(ioc.value, 'virustotal', check_virustotal)
     elif ioc.type == IOC_Type.DOMAIN:
         results['urlhaus'] = cache_lookup(ioc.value, 'urlhaus', check_urlhaus)
-
+    elif ioc.type in (IOC_Type.MD5, IOC_Type.SHA1, IOC_Type.SHA256):
+        results['virustotal'] = cache_lookup(ioc.value, 'virustotal', check_hash)
     return results
