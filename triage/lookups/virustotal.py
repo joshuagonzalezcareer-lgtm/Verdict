@@ -31,3 +31,25 @@ def check_virustotal(ip: str):
         "harmless": stats["harmless"],
         "reputation": attributes["reputation"],
     }
+
+def check_hash(hash: str):
+    url = f"https://www.virustotal.com/api/v3/files/{hash}"
+
+    headers = {
+        "x-apikey": os.getenv("VIRUSTOTAL_API_KEY"),
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+    except requests.RequestException:
+        return None
+
+    attributes = response.json()["data"]["attributes"]
+    stats = attributes["last_analysis_stats"]
+
+    return {
+        "malicious": stats["malicious"],
+        "suspicious": stats["suspicious"],
+        "harmless": stats["harmless"],
+        "reputation": attributes["reputation"],
+    }
